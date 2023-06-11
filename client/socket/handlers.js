@@ -16,8 +16,9 @@ const receivedMessage = (payload, socket) => {
 	socket.emit('RECEIVED MESSAGE', payload);
 };
 
-const updateValue = (payload, valueToUpdate) => {
-	valueToUpdate = payload;
+const updateValue = (payload, state) => {
+	console.log(state[payload.valueToUpdate]);
+	state[payload.valueToUpdate] = payload.input;
 };
 
 module.exports = {

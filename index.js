@@ -23,6 +23,7 @@ const {
 	sendMessage,
 	relayMessage,
 	receivedMessage,
+	updateValue,
 } = require('./server/socket/handlers');
 
 //* Socket server base connection logic */
@@ -33,6 +34,7 @@ io.on('connection', socket => {
 
 	// send this socket to the handler so it can use broadcasting
 	socket.on('SEND MESSAGE', payload => relayMessage(payload, socket));
+	socket.on('BASIC INPUT', payload => updateValue(payload, socket));
 });
 
 //* Express server with websocket connection started */

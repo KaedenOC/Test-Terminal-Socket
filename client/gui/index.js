@@ -12,13 +12,15 @@ const {
 	sendMessage,
 	receiveMessage,
 	receivedMessage,
-	input,
+	updateValue,
 } = require('../socket/handlers');
 
 // Socket handlers for the client
 socket.on('RELAY MESSAGE', payload => receiveMessage(payload, socket));
-socket.on('BASIC INPUT', (payload, valueToUpdate) => {
-	updateValue(payload, valueToUpdate);
+socket.on('UPDATE VALUE', payload => {
+	console.log('RECEIVED UPDATE VALUE', payload);
+	updateValue(payload, state);
+	console.log(state.basicPrompt);
 });
 
 //* Proof of life message */
@@ -63,7 +65,7 @@ term.on('key', (name, matches, data) => {
 			state.menu = false;
 			state.prompt = true;
 			//? pass in the terminal, value to update, and socket into the function to update State and values
-			basicInputPrompt(term, state.basicPrompt, socket);
+			basicInputPrompt(term, 'basicPrompt', socket);
 
 			// reset the state after its finished
 			state.prompt = false;
