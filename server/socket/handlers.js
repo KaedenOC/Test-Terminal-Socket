@@ -1,16 +1,17 @@
 //* */ Modularized Socket Server functions
 
 const onAny = (event, payload, socket) => {
-	console.log('Event:', event, payload);
-};
+  console.log('Event:', event, payload)
+}
 
 const relayMessage = (payload, socket) => {
-	socket.broadcast.emit('RELAY MESSAGE', payload);
-};
+  // relay the message to everyone BUT THE SENDER
+  socket.broadcast.emit('RELAY MESSAGE', payload)
+}
 
 const updateValue = (payload, socket) => {
-	console.log('RELAYING UPDATE');
-	socket.broadcast.emit('UPDATE VALUE', payload);
-};
+  // relay the message back to ONLY THE SENDER
+  socket.emit('UPDATE VALUE', payload)
+}
 
-module.exports = { onAny, relayMessage, updateValue };
+module.exports = { onAny, relayMessage, updateValue }
