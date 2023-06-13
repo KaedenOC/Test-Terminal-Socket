@@ -1,19 +1,39 @@
 const { newLine } = require('../lib')
 
-//? instead of returning user input use socket.emit to control the MAIN terminal
 const basicInputPrompt = async (term, valueToUpdate, socket) => {
-  // name the input prompt by "console logging" the name
   newLine(term, false)
-  term('please enter a prompt: ')
+  term('please enter a prompt: ');
 
-  // do a function with the passed in terminal object
-  let userInput = await term.inputField(function (error, input) {
-    // set the color and effects
+  let userInput = await term.inputField(async function (error, input) {
     term.green("\nYour prompt is '%s'\n", input)
-    // update state through socket client because it doesn't work through other methods
-    socket.emit('BASIC INPUT', { input, valueToUpdate })
-    // return the value entered
-  }).promise //? Create this input as a promise so it can be awaited and returned
+
+    if (input.toLowerCase() === 'login') {
+      // Prompt for login
+      term('please enter a username: ');
+      const username = await term.inputField('Username: ').promise;
+      newLine(term, false);
+      term('please enter a password: ');
+      const password = await term.inputField('Password: ').promise;
+
+      // Perform authentication logic here, e.g., check against database
+
+      // Simulate successful login for demonstration purposes
+      if (username === 'admin' && password === 'test') {
+        newLine(term, false);
+        term.green('Login successful!\n');
+        socket.emit('BASIC INPUT', { input: 'login', valueToUpdate });
+        // Additional logic after login
+      } else {
+        newLine(term, false);
+        term.red('Invalid username or password.\n');
+        // Handle invalid login
+      }
+    } else {
+      socket.emit('BASIC INPUT', { input, valueToUpdate });
+    }
+  }).promise;
+
+  return userInput; // Return the value of userInput
 }
 
-module.exports = basicInputPrompt
+module.exports = basicInputPrompt;

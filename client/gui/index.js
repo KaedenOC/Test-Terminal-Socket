@@ -16,8 +16,8 @@ const {
 } = require('../socket/handlers')
 
 // Socket handlers for the client
-socket.on('RELAY MESSAGE', payload => receiveMessage(term, payload, socket))
-socket.on('UPDATE VALUE', payload => updateValue(payload, state))
+socket.on('RELAY MESSAGE', payload => receiveMessage(term, payload, socket));
+socket.on('UPDATE VALUE', payload => updateValue(payload, state));
 
 let basicPrompt = ''
 
@@ -43,7 +43,7 @@ term.on('mouse', (name, matches, data) => {
   }
 })
 // get key inputs
-term.on('key', (name, matches, data) => {
+term.on('key', async (name, matches, data) => {
   //? console.log('keyboard', name, data);
 
   if (name === 'END' || name === 'CTRL_C') {
@@ -63,7 +63,7 @@ term.on('key', (name, matches, data) => {
       state.menu = false
       state.prompt = true
       //? pass in the terminal, value to update, and socket into the function to update State and values
-      basicInputPrompt(term, 'basicPrompt', socket)
+       await basicInputPrompt(term, 'basicPrompt', socket)
 
       // reset the state after its finished
       state.prompt = false
@@ -75,7 +75,7 @@ term.on('key', (name, matches, data) => {
       term.blue(JSON.stringify(state))
     }
   }
-})
+}).promise;
 
 //* Make the terminal-kit override the normal terminal and listen for input so we can custom things with it */
 //! When terminal-kit overrides these inputs it needs to have a way to terminate.

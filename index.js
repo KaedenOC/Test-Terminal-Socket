@@ -33,8 +33,8 @@ io.on('connection', socket => {
   socket.onAny((event, payload) => onAny(event, payload))
 
   // send this socket to the handler so it can use broadcasting
-  socket.on('SEND MESSAGE', payload => relayMessage(payload, socket))
-  socket.on('BASIC INPUT', payload => updateValue(payload, socket))
+  socket.on('SEND MESSAGE', payload => relayMessage(payload, socket));
+  socket.on('BASIC INPUT', payload => updateValue(payload, socket));
 })
 
 //* Express server with websocket connection started */
